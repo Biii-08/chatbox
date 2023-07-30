@@ -1,0 +1,11 @@
+.group-container {
+    height: 300px; 
+
+
+  }
+  
+  .group-content {
+    overflow-y: scroll;
+    height: 100%; 
+  }
+  

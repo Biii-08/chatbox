@@ -1,40 +1,88 @@
-"use client";
-import React, { useState, useEffect } from "react";
+'use client'
+import React, { useState, useEffect } from 'react'
+import { Member } from '../app/Interfaces'
 
-const Chat = () => {
-  const [inputValue, setInputValue] = useState("");
+interface ChatProps {
+  member: Member
+}
 
-  // Handle changes in the input field
+const Chat: React.FC<ChatProps> = ({ member }) => {
+  const [inputValue, setInputValue] = useState('')
+  const [isButtonBlue, setIsButtonBlue] = useState(false)
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
+    const value = event.target.value
+    setInputValue(value)
+    setIsButtonBlue(value.trim().length > 0)
+  }
 
-  // Effect to update the button appearance based on input value
   useEffect(() => {
     if (inputValue.trim().length > 0) {
-      const sendButton = document.getElementById("sendButton");
+      const sendButton = document.getElementById('sendButton')
       if (sendButton) {
-        sendButton.classList.add("bg-blue-500");
+        sendButton.classList.add('bg-blue-500')
       }
     } else {
-      const sendButton = document.getElementById("sendButton");
+      const sendButton = document.getElementById('sendButton')
       if (sendButton) {
-        sendButton.classList.remove("bg-blue-500");
+        sendButton.classList.remove('bg-blue-500')
       }
     }
-  }, [inputValue]);
+  }, [inputValue])
+  const handleButtonClick = () => {
+    logInputValue()
+  }
+
+  const handleInputKeyPress = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === 'Enter') {
+      logInputValue()
+    }
+  }
+
+  const logInputValue = () => {
+    if (inputValue.trim().length > 0) {
+      console.log('Input value:', inputValue)
+      setInputValue('')
+    }
+  }
+  const handleFileButtonClick = () => {
+    const fileInput = document.createElement('input')
+    fileInput.type = 'file'
+    fileInput.style.display = 'none'
+
+    fileInput.addEventListener('change', (event) => {
+      const inputElement = event.target as HTMLInputElement
+      const selectedFile = inputElement?.files?.[0]
+      if (selectedFile) {
+        console.log('Selected file:', selectedFile)
+      }
+    })
+
+    fileInput.click()
+  }
   return (
     <div className="flex flex-col h-full w-full bg-white dark:bg-slate-700 [#191E29] px-4 py-6">
       <div className="flex flex-row items-center py-4 px-6 rounded-2xl shadow dark:shadow-slate-500">
         <div className="flex items-center justify-center h-10 w-10 rounded-full bg-pink-500 text-pink-100">
-          T
+          {member.avatar}
         </div>
         <div className="flex flex-col ml-3">
           <div className="font-semibold text-sm text-black dark:text-white">
-            UI Art Design
+            {member.name}
           </div>
           <div className="text-xs text-gray-500 dark:text-slate-300">
-            Active
+            {member.isActive ? (
+              <div className="flex flex-row gap-2">
+                <span className="text-gray text-xs">Active</span>
+                <span className="flex items-center mt-1 justify-center h-2 w-2 ml-1 bg-green-500 text-white text-xs rounded-full"></span>
+              </div>
+            ) : (
+              <span className={` text-gray text-xs `}>
+                Active {member.time} ago
+              </span>
+            )}
           </div>
         </div>
         <div className="ml-auto">
@@ -111,162 +159,20 @@ const Chat = () => {
           </ul>
         </div>
       </div>
-      <div className="h-full overflow-hidden py-4">
-        <div className="h-full overflow-y-auto">
-          <div className="grid grid-cols-12 gap-y-2">
-            <div className="col-start-1 col-end-8 p-3 rounded-lg">
-              <div className="flex flex-row items-center">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  A
-                </div>
-                <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                  <div>Hey How are you today?</div>
-                </div>
-              </div>
+
+      <div className="flex flex-col flex-grow mt-4 ml-2 overflow-y-auto">
+        {member.messages.map((message, index) => (
+          <div key={index} className="flex flex-row items-center my-2">
+            <div className="flex items-center justify-center h-10 w-10 text-pink-300 rounded-full bg-pink-500 flex-shrink-0">
+              {member.avatar}
             </div>
-            <div className="col-start-1 col-end-8 p-3 rounded-lg">
-              <div className="flex flex-row items-center">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  A
-                </div>
-                <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                  <div>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Vel ipsa commodi illum saepe numquam maxime asperiores
-                    voluptate sit, minima perspiciatis.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-start-6 col-end-13 p-3 rounded-lg">
-              <div className="flex items-center justify-start flex-row-reverse">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  A
-                </div>
-                <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                  <div>I'm ok what about you?</div>
-                </div>
-              </div>
-            </div>
-            <div className="col-start-6 col-end-13 p-3 rounded-lg">
-              <div className="flex items-center justify-start flex-row-reverse">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  A
-                </div>
-                <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                  <div>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing. ?
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-start-1 col-end-8 p-3 rounded-lg">
-              <div className="flex flex-row items-center">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  A
-                </div>
-                <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                  <div>Lorem ipsum dolor sit amet !</div>
-                </div>
-              </div>
-            </div>
-            <div className="col-start-6 col-end-13 p-3 rounded-lg">
-              <div className="flex items-center justify-start flex-row-reverse">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  A
-                </div>
-                <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                  <div>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing. ?
-                  </div>
-                  <div className="absolute text-xs bottom-0 right-0 -mb-5 mr-2 text-gray-500">
-                    Seen
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-start-1 col-end-8 p-3 rounded-lg">
-              <div className="flex flex-row items-center">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  A
-                </div>
-                <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                  <div>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Perspiciatis, in.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-start-1 col-end-8 p-3 rounded-lg">
-              <div className="flex flex-row items-center">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                  A
-                </div>
-                <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                  <div className="flex flex-row items-center">
-                    <button className="flex items-center justify-center bg-indigo-600 hover:bg-indigo-800 rounded-full h-8 w-10">
-                      <svg
-                        className="w-6 h-6 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="1.5"
-                          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                        ></path>
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="1.5"
-                          d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        ></path>
-                      </svg>
-                    </button>
-                    <div className="flex flex-row items-center space-x-px ml-4">
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-4 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-12 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-6 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-5 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-4 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-3 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-10 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-1 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-1 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-8 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-2 w-1 bg-gray-500 rounded-lg"></div>
-                      <div className="h-4 w-1 bg-gray-500 rounded-lg"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="relative ml-3 text-sm bg-white py-2 max-w-[500px] px-4 shadow rounded-xl">
+              {message}
             </div>
           </div>
-        </div>
+        ))}
       </div>
+
       <div className="flex flex-row items-center">
         <div className="flex flex-row items-center w-full border dark:border-slate-500 rounded-3xl h-12 px-2">
           <button className="flex items-center justify-center h-10 w-10 text-gray-400 ml-1">
@@ -292,10 +198,14 @@ const Chat = () => {
               placeholder="Type your message...."
               value={inputValue}
               onChange={handleInputChange}
+              onKeyPress={handleInputKeyPress}
             />
           </div>
           <div className="flex flex-row">
-            <button className="flex items-center justify-center h-10 w-8 text-gray-400">
+            <button
+              className="flex items-center justify-center h-10 w-8 text-gray-400"
+              onClick={handleFileButtonClick}
+            >
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -332,8 +242,11 @@ const Chat = () => {
         <div className="ml-6">
           <button
             type="button"
-            className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-200 text-indigo-800 text-white"
+            className={`flex items-center justify-center h-10 w-10 rounded-full text-indigo-800 text-white ${
+              isButtonBlue ? 'bg-blue-500' : 'bg-gray-200'
+            }`}
             id="sendButton"
+            onClick={handleButtonClick}
           >
             <svg
               className="w-5 h-5 transform rotate-90 -mr-px"
@@ -353,7 +266,7 @@ const Chat = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Chat;
+export default Chat
