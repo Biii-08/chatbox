@@ -1,67 +1,84 @@
-'use client'
-import React, { useState, useEffect } from 'react'
-import { Member } from '../app/Interfaces'
+"use client";
+import React, { useState, useEffect } from "react";
+import { Member } from "../app/Interfaces";
 
 interface ChatProps {
-  member: Member
+  member: Member;
 }
 
 const Chat: React.FC<ChatProps> = ({ member }) => {
-  const [inputValue, setInputValue] = useState('')
-  const [isButtonBlue, setIsButtonBlue] = useState(false)
+  const [inputValue, setInputValue] = useState("");
+  const [isButtonBlue, setIsButtonBlue] = useState(false);
+
+  const formatTimeDifference = (dateString: string) => {
+    const currentDate = new Date();
+    const messageDate = new Date(dateString);
+    const timeDifferenceInSeconds =
+      (currentDate.getTime() - messageDate.getTime()) / 1000;
+
+    if (timeDifferenceInSeconds < 60) {
+      return `${Math.floor(timeDifferenceInSeconds)}s ago`;
+    } else if (timeDifferenceInSeconds < 3600) {
+      return `${Math.floor(timeDifferenceInSeconds / 60)}m ago`;
+    } else if (timeDifferenceInSeconds < 86400) {
+      return `${Math.floor(timeDifferenceInSeconds / 3600)}h ago`;
+    } else {
+      return "";
+    }
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-    setInputValue(value)
-    setIsButtonBlue(value.trim().length > 0)
-  }
+    const value = event.target.value;
+    setInputValue(value);
+    setIsButtonBlue(value.trim().length > 0);
+  };
 
   useEffect(() => {
     if (inputValue.trim().length > 0) {
-      const sendButton = document.getElementById('sendButton')
+      const sendButton = document.getElementById("sendButton");
       if (sendButton) {
-        sendButton.classList.add('bg-blue-500')
+        sendButton.classList.add("bg-blue-500");
       }
     } else {
-      const sendButton = document.getElementById('sendButton')
+      const sendButton = document.getElementById("sendButton");
       if (sendButton) {
-        sendButton.classList.remove('bg-blue-500')
+        sendButton.classList.remove("bg-blue-500");
       }
     }
-  }, [inputValue])
+  }, [inputValue]);
   const handleButtonClick = () => {
-    logInputValue()
-  }
+    logInputValue();
+  };
 
   const handleInputKeyPress = (
-    event: React.KeyboardEvent<HTMLInputElement>,
+    event: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    if (event.key === 'Enter') {
-      logInputValue()
+    if (event.key === "Enter") {
+      logInputValue();
     }
-  }
+  };
 
   const logInputValue = () => {
     if (inputValue.trim().length > 0) {
-      console.log('Input value:', inputValue)
-      setInputValue('')
+      console.log("Input value:", inputValue);
+      setInputValue("");
     }
-  }
+  };
   const handleFileButtonClick = () => {
-    const fileInput = document.createElement('input')
-    fileInput.type = 'file'
-    fileInput.style.display = 'none'
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.style.display = "none";
 
-    fileInput.addEventListener('change', (event) => {
-      const inputElement = event.target as HTMLInputElement
-      const selectedFile = inputElement?.files?.[0]
+    fileInput.addEventListener("change", (event) => {
+      const inputElement = event.target as HTMLInputElement;
+      const selectedFile = inputElement?.files?.[0];
       if (selectedFile) {
-        console.log('Selected file:', selectedFile)
+        console.log("Selected file:", selectedFile);
       }
-    })
+    });
 
-    fileInput.click()
-  }
+    fileInput.click();
+  };
   return (
     <div className="flex flex-col h-full w-full bg-white dark:bg-slate-700 [#191E29] px-4 py-6">
       <div className="flex flex-row items-center py-4 px-6 rounded-2xl shadow dark:shadow-slate-500">
@@ -70,7 +87,7 @@ const Chat: React.FC<ChatProps> = ({ member }) => {
         </div>
         <div className="flex flex-col ml-3">
           <div className="font-semibold text-sm text-black dark:text-white">
-            {member.name}
+            {member.username}
           </div>
           <div className="text-xs text-gray-500 dark:text-slate-300">
             {member.isActive ? (
@@ -80,7 +97,7 @@ const Chat: React.FC<ChatProps> = ({ member }) => {
               </div>
             ) : (
               <span className={` text-gray text-xs `}>
-                Active {member.time} ago
+                {formatTimeDifference(member.last_online)}
               </span>
             )}
           </div>
@@ -162,12 +179,21 @@ const Chat: React.FC<ChatProps> = ({ member }) => {
 
       <div className="flex flex-col flex-grow mt-4 ml-2 overflow-y-auto">
         {member.messages.map((message, index) => (
-          <div key={index} className="flex flex-row items-center my-2">
-            <div className="flex items-center justify-center h-10 w-10 text-pink-300 rounded-full bg-pink-500 flex-shrink-0">
-              {member.avatar}
+          <div
+            key={index}
+            className={`flex flex-row items-center my-2 ${
+              message.isUser ? "justify-start" : "justify-end"
+            }`}
+          >
+            <div
+              className={`flex items-center justify-center mr-2 h-10 w-10 rounded-full bg-${
+                message.isAdmin ? "purple" : "pink"
+              }-500 text-pink-300 font-bold flex-shrink-0`}
+            >
+              {message.isUser ? member.avatar : ""}
             </div>
-            <div className="relative ml-3 text-sm bg-white py-2 max-w-[500px] px-4 shadow rounded-xl">
-              {message}
+            <div className="relative text-sm bg-white py-2 max-w-[500px] px-4 shadow rounded-xl">
+              {message.content}
             </div>
           </div>
         ))}
@@ -243,7 +269,7 @@ const Chat: React.FC<ChatProps> = ({ member }) => {
           <button
             type="button"
             className={`flex items-center justify-center h-10 w-10 rounded-full text-indigo-800 text-white ${
-              isButtonBlue ? 'bg-blue-500' : 'bg-gray-200'
+              isButtonBlue ? "bg-blue-500" : "bg-gray-200"
             }`}
             id="sendButton"
             onClick={handleButtonClick}
@@ -266,7 +292,7 @@ const Chat: React.FC<ChatProps> = ({ member }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Chat
+export default Chat;

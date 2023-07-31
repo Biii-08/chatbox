@@ -3,20 +3,35 @@
 import React, { useState, useEffect } from "react";
 
 import { groupContainerDummy } from "@/constants";
-import { GroupContainerProps, Member } from "../app/Interfaces";
+import { GroupContainerProps, Member, Group } from "../app/Interfaces";
+import { formatDistanceToNow } from "date-fns";
 
 interface GroupContainerPropsWithClick extends GroupContainerProps {
   onPersonClick: (person: Member) => void;
 }
 
 const Messages: React.FC<GroupContainerPropsWithClick> = ({
-  groups,
   onPersonClick,
 }) => {
   const [selectedPerson, setSelectedPerson] = useState<Member | null>(null);
-  const [totalMessages, setTotalMessages] = useState<number>(0);
+  const [activeMember, setActiveMember] = useState<Member | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+  const teamsGroup: Group = {
+    type: "Teams",
+    members: groupContainerDummy.teams,
+  };
+  const personalGroup: Group = {
+    type: "Personal",
+    members: groupContainerDummy.personal,
+  };
+  const groups: Group[] = [teamsGroup, personalGroup];
+
+  const formatTimeDifference = (createdAt: string) => {
+    const date = new Date(createdAt);
+    const timeDifference = formatDistanceToNow(date, { addSuffix: true });
+    return timeDifference;
+  };
 
   const handleMemberClick = (member: Member) => {
     onPersonClick(member);
@@ -25,21 +40,13 @@ const Messages: React.FC<GroupContainerPropsWithClick> = ({
   useEffect(() => {
     const filtered = groups.flatMap((group) =>
       group.members.filter((member) =>
-        member.name.toLowerCase().includes(searchQuery.toLowerCase())
+        member.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
     setFilteredMembers(filtered);
   }, [groups, searchQuery]);
 
-  useEffect(() => {
-    let count = 0;
-    groupContainerDummy.groups.forEach((group) => {
-      group.members.forEach((member) => {
-        count += member.messages.length;
-      });
-    });
-    setTotalMessages(count);
-  }, [selectedPerson]);
+  useEffect(() => {}, [selectedPerson]);
 
   return (
     <div className="flex flex-row w-96 h-full flex-shrink-0 relative bg-gray-100 dark:bg-[#637685] [#0B0E14] dark:text-white p-4">
@@ -48,7 +55,7 @@ const Messages: React.FC<GroupContainerPropsWithClick> = ({
           <div className="flex flex-row items-center">
             <div className="text-xl font-semibold ">Messages</div>
             <div className="flex items-center justify-center ml-2 text-xs h-5 w-5 text-white bg-red-500 rounded-full font-medium">
-              {totalMessages}
+              {/* {new_messages} */}
             </div>
           </div>
           <div className="ml-auto">
@@ -110,51 +117,57 @@ const Messages: React.FC<GroupContainerPropsWithClick> = ({
         </div>
         <div>
           {groups.map((group) => (
-            <div key={group.id} className="group-container mt-6">
+            <div key={group.type} className="group-container mt-6">
               <div className="text-xs text-gray-400 mt-8 dark:text-slate-300 font-semibold uppercase">
                 {group.type}
               </div>
               <div
-                className="group-content mt-3 "
-                style={{ maxHeight: "400px", overflowY: "auto" }}
+                className="group-content mt-3"
+                style={{ maxHeight: "300px", overflowY: "auto" }}
               >
                 {group.members.map((member) => (
                   <div
                     key={member.id}
                     onClick={() => handleMemberClick(member)}
                   >
-                    <div className="flex flex-row items-center p-4 relative">
-                      <div className="absolute text-xs text-gray-500 dark:text-slate-300 right-0 top-0 mr-4 mt-3">
-                        {member.time}
-                      </div>
-                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-pink-500 text-pink-300 font-bold flex-shrink-0">
-                        {member.avatar}
-                      </div>
-                      <div className="flex flex-col flex-grow ml-3">
-                        <div className="text-sm flex gap-2 flex-row font-medium">
-                          {member.name}
-                          {member.isActive && (
-                            <span
-                              className={`justify-center h-2 mt-1 w-2 bg-green-500 text-white text-xs rounded-full`}
-                            ></span>
-                          )}
+                    <div
+                      key={member.id}
+                      onClick={() => handleMemberClick(member)}
+                    >
+                      <div className="flex flex-row items-center p-4 relative">
+                        <div className="absolute text-xs text-gray-500 dark:text-slate-300 right-0 top-0 mr-4 mt-3">
+                          {formatTimeDifference(member.messages[0]?.createdAt)}
                         </div>
-                        <div className="flex flex-row">
-                          <div className="text-xs truncate w-40">
-                            {member.messages.length > 0
-                              ? member.messages[0]
-                              : ""}
+                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-pink-500 text-pink-300 font-bold flex-shrink-0">
+                          {member.avatar}
+                        </div>
+                        <div className="flex flex-col flex-grow ml-3">
+                          <div className="text-sm flex gap-2 flex-row font-medium">
+                            {member.username}
+                            {member.isActive && (
+                              <span className="justify-center h-2 mt-1 w-2 bg-green-500 text-white text-xs rounded-full"></span>
+                            )}
                           </div>
-                          {member.messages.length > 0 && (
-                            <div className="flex-shrink-0 absolute right-0 self-end mb-1">
-                              <span className="flex items-center justify-center h-5 w-5 bg-red-500 text-white text-xs rounded-full">
-                                {member.messages.length}
-                              </span>
+                          <div className="flex flex-row">
+                            <div className="text-xs truncate w-40">
+                              {member.messages.length > 0 ? (
+                                <span>{member.messages[0].content}</span>
+                              ) : (
+                                ""
+                              )}
                             </div>
-                          )}
+
+                            {member.messages.length > 0 && (
+                              <div className="flex-shrink-0 absolute right-0 self-end mb-1">
+                                <span className="flex items-center justify-center h-5 w-5 bg-red-500 text-white text-xs rounded-full">
+                                  {member.new_messages}
+                                </span>
+                              </div>
+                            )}
+                          </div>
                         </div>
+                        <div className="flex-shrink-0 ml-2 self-end mb-1"></div>
                       </div>
-                      <div className="flex-shrink-0 ml-2 self-end mb-1"></div>
                     </div>
                   </div>
                 ))}
