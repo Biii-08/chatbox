@@ -12,7 +12,6 @@ export interface Member {
   avatar: string;
   messages: Message[];
   last_online: string;
-  createdAt: string;
   new_messages: number;
 }
 

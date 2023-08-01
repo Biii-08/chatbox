@@ -10,28 +10,28 @@ export const groupContainerDummy = {
           content: "Hello there!",
           isAdmin: false,
           isUser: true,
-          createdAt: "2023-07-14T07:29:55",
+          createdAt: "2023-08-01T00:00:00",
         },
         {
           content: "Hello there!",
           isAdmin: false,
           isUser: true,
-          createdAt: "2023-07-14T07:29:59",
+          createdAt: "2023-08-01T00:00:00",
         },
         {
           content: "How are you?",
           isAdmin: true,
-          isUSer: false,
-          createdAt: "2023-07-14T07:29:59",
+          isUser: false,
+          createdAt: "2023-08-01T00:00:00",
         },
         {
           content: "Consectetur adipisicing elit.",
           isAdmin: true,
           isUser: false,
-          createdAt: "2023-07-14T07:29:59",
+          createdAt: "2023-08-01T00:00:00",
         },
       ],
-      last_online: "2023-07-27T18:45:00",
+      last_online: "2023-07-14T07:29:55",
       new_messages: 4,
     },
     {
@@ -56,7 +56,7 @@ export const groupContainerDummy = {
           content: "Consectetur adipisicing elit.",
           isAdmin: true,
           isUser: false,
-          createdAt: "2023-07-27T18:45:00",
+          createdAt: "2023-08-01T09:00:00",
         },
       ],
       last_online: "2023-07-14T07:29:55",
@@ -86,7 +86,7 @@ export const groupContainerDummy = {
           content: "Consectetur adipisicing elit.",
           isAdmin: false,
           isUser: true,
-          createdAt: "2023-07-22T21:45:00",
+          createdAt: "2023-08-01T09:47:00",
         },
       ],
       last_online: "2023-07-22T21:45:00",
@@ -307,7 +307,6 @@ export const groupContainerDummy = {
     {
       id: 3,
       username: "Sarah D",
-      time: "3 hours",
       isActive: false,
       avatar: "T",
       messages: [
@@ -334,33 +333,7 @@ export const groupContainerDummy = {
           content:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
           isAdmin: false,
-          isUSer: true,
-          createdAt: "2023-07-14T07:30:00",
-        },
-        {
-          content: "Lorem ipsum dolor sit amet.",
-          isAdmin: false,
           isUser: true,
-          createdAt: "2023-07-14T07:30:00",
-        },
-        {
-          content: "Consectetur adipisicing elit.",
-          isAdmin: true,
-          isUser: false,
-          createdAt: "2023-07-14T07:30:00",
-        },
-        {
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
-          isAdmin: true,
-          isUser: false,
-          createdAt: "2023-07-14T07:30:00",
-        },
-        {
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
-          isAdmin: false,
-          isUSer: true,
           createdAt: "2023-07-14T07:30:00",
         },
         {
@@ -380,13 +353,39 @@ export const groupContainerDummy = {
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
           isAdmin: true,
           isUser: false,
+          createdAt: "2023-07-14T07:30:00",
+        },
+        {
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
+          isAdmin: false,
+          isUser: true,
+          createdAt: "2023-07-14T07:30:00",
+        },
+        {
+          content: "Lorem ipsum dolor sit amet.",
+          isAdmin: false,
+          isUser: true,
+          createdAt: "2023-07-14T07:30:00",
+        },
+        {
+          content: "Consectetur adipisicing elit.",
+          isAdmin: true,
+          isUser: false,
+          createdAt: "2023-07-14T07:30:00",
+        },
+        {
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
+          isAdmin: true,
+          isUser: false,
           createdAt: "2023-07-29T08:00:00",
         },
         {
           content:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
           isAdmin: false,
-          isUSer: true,
+          isUser: true,
           createdAt: "2023-07-29T08:00:00",
         },
         {
@@ -412,7 +411,7 @@ export const groupContainerDummy = {
           content:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
           isAdmin: false,
-          isUSer: true,
+          isUser: true,
           createdAt: "2023-07-29T08:00:00",
         },
         {
@@ -438,7 +437,7 @@ export const groupContainerDummy = {
           content:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
           isAdmin: false,
-          isUSer: true,
+          isUser: true,
           createdAt: "2023-07-29T08:00:00",
         },
         {
@@ -464,7 +463,7 @@ export const groupContainerDummy = {
           content:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
           isAdmin: false,
-          isUSer: true,
+          isUser: true,
           createdAt: "2023-07-29T08:00:00",
         },
         {
@@ -490,7 +489,7 @@ export const groupContainerDummy = {
           content:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
           isAdmin: false,
-          isUSer: true,
+          isUser: true,
           createdAt: "2023-07-29T08:00:00",
         },
         {
@@ -516,7 +515,7 @@ export const groupContainerDummy = {
           content:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
           isAdmin: false,
-          isUSer: true,
+          isUser: true,
           createdAt: "2023-07-29T08:00:00",
         },
         {
@@ -542,7 +541,7 @@ export const groupContainerDummy = {
           content:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?",
           isAdmin: false,
-          isUSer: true,
+          isUser: true,
           createdAt: "2023-07-29T08:00:00",
         },
       ],
@@ -625,20 +624,20 @@ export const groupContainerDummy = {
     {
       id: 7,
       username: "Sarah D",
-      time: "3 hours",
-
       isActive: false,
       avatar: "T",
       messages: [],
+      last_online: "2023-07-31T07:44:22.767Z",
+      new_messages: 0,
     },
     {
       id: 7,
       username: "Sarah D",
-      time: "3 hours",
-
       isActive: false,
       avatar: "T",
       messages: [],
+      last_online: "2023-07-31T07:44:22.767Z",
+      new_messages: 0,
     },
     {
       id: 8,

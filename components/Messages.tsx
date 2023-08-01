@@ -12,6 +12,7 @@ interface GroupContainerPropsWithClick extends GroupContainerProps {
 
 const Messages: React.FC<GroupContainerPropsWithClick> = ({
   onPersonClick,
+  team,
 }) => {
   const [selectedPerson, setSelectedPerson] = useState<Member | null>(null);
   const [activeMember, setActiveMember] = useState<Member | null>(null);
@@ -21,16 +22,29 @@ const Messages: React.FC<GroupContainerPropsWithClick> = ({
     type: "Teams",
     members: groupContainerDummy.teams,
   };
+
   const personalGroup: Group = {
     type: "Personal",
     members: groupContainerDummy.personal,
   };
+
   const groups: Group[] = [teamsGroup, personalGroup];
 
-  const formatTimeDifference = (createdAt: string) => {
-    const date = new Date(createdAt);
-    const timeDifference = formatDistanceToNow(date, { addSuffix: true });
-    return timeDifference;
+  const formatTimeDifference = (dateString: string) => {
+    const currentDate = new Date();
+    const messageDate = new Date(dateString);
+    const timeDifferenceInSeconds =
+      (currentDate.getTime() - messageDate.getTime()) / 1000;
+
+    if (timeDifferenceInSeconds < 60) {
+      return `${Math.floor(timeDifferenceInSeconds)}s ago`;
+    } else if (timeDifferenceInSeconds < 3600) {
+      return `${Math.floor(timeDifferenceInSeconds / 60)}m ago`;
+    } else if (timeDifferenceInSeconds < 86400) {
+      return `${Math.floor(timeDifferenceInSeconds / 3600)}h ago`;
+    } else {
+      return "";
+    }
   };
 
   const handleMemberClick = (member: Member) => {
@@ -54,9 +68,9 @@ const Messages: React.FC<GroupContainerPropsWithClick> = ({
         <div className="flex flex-row items-center">
           <div className="flex flex-row items-center">
             <div className="text-xl font-semibold ">Messages</div>
-            <div className="flex items-center justify-center ml-2 text-xs h-5 w-5 text-white bg-red-500 rounded-full font-medium">
-              {/* {new_messages} */}
-            </div>
+            {/* <div className="flex items-center justify-center ml-2 text-xs h-5 w-5 text-white bg-red-500 rounded-full font-medium">
+              {new_messages}
+            </div> */}
           </div>
           <div className="ml-auto">
             <div className="relative">
@@ -125,7 +139,7 @@ const Messages: React.FC<GroupContainerPropsWithClick> = ({
                 className="group-content mt-3"
                 style={{ maxHeight: "300px", overflowY: "auto" }}
               >
-                {group.members.map((member) => (
+                {filteredMembers.map((member) => (
                   <div
                     key={member.id}
                     onClick={() => handleMemberClick(member)}
@@ -133,11 +147,17 @@ const Messages: React.FC<GroupContainerPropsWithClick> = ({
                     <div
                       key={member.id}
                       onClick={() => handleMemberClick(member)}
+                      className="cursor-pointer"
                     >
                       <div className="flex flex-row items-center p-4 relative">
                         <div className="absolute text-xs text-gray-500 dark:text-slate-300 right-0 top-0 mr-4 mt-3">
-                          {formatTimeDifference(member.messages[0]?.createdAt)}
+                          {member.messages.length > 0 &&
+                            formatTimeDifference(
+                              member.messages[member.messages.length - 1]
+                                .createdAt || ""
+                            )}
                         </div>
+
                         <div className="flex items-center justify-center h-10 w-10 rounded-full bg-pink-500 text-pink-300 font-bold flex-shrink-0">
                           {member.avatar}
                         </div>
@@ -151,7 +171,12 @@ const Messages: React.FC<GroupContainerPropsWithClick> = ({
                           <div className="flex flex-row">
                             <div className="text-xs truncate w-40">
                               {member.messages.length > 0 ? (
-                                <span>{member.messages[0].content}</span>
+                                <span>
+                                  {
+                                    member.messages[member.messages.length - 1]
+                                      .content
+                                  }
+                                </span>
                               ) : (
                                 ""
                               )}
