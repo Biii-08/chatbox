@@ -8,4 +8,12 @@
     overflow-y: scroll;
     height: 100%; 
   }
-  
+  .group-options{
+    background-color: #f7fafc!important;
+    z-index: 9999 !important;
+
+  }
+  .admin{
+    background-color: rgb(179, 179, 223) !important;
+   
+  }

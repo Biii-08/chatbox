@@ -133,7 +133,7 @@ const Messages: React.FC<GroupContainerPropsWithClick> = ({
           {groups.map((group) => (
             <div key={group.type} className="group-container mt-6">
               <div className="text-xs text-gray-400 mt-8 dark:text-slate-300 font-semibold uppercase">
-                {group.type}
+                Groups
               </div>
               <div
                 className="group-content mt-3"

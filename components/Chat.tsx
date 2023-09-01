@@ -1,6 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Member } from "../app/Interfaces";
+import "@/styles/groupcontainer.css";
+import { SlPeople } from "react-icons/Sl";
+import { RxCross2 } from "react-icons/Rx";
 
 interface ChatProps {
   member: Member;
@@ -9,6 +12,8 @@ interface ChatProps {
 const Chat: React.FC<ChatProps> = ({ member }) => {
   const [inputValue, setInputValue] = useState("");
   const [isButtonBlue, setIsButtonBlue] = useState(false);
+
+  const [isMoreLinksVisible, setIsMoreLinksVisible] = useState(false);
 
   const formatTimeDifference = (dateString: string) => {
     const currentDate = new Date();
@@ -79,6 +84,10 @@ const Chat: React.FC<ChatProps> = ({ member }) => {
 
     fileInput.click();
   };
+  const toggleDropUpMenu = () => {
+    setIsMoreLinksVisible(!isMoreLinksVisible);
+  };
+
   return (
     <div className="flex flex-col h-full w-full bg-white dark:bg-slate-700 [#191E29] px-4 py-6">
       <div className="flex flex-row items-center py-4 px-6 rounded-2xl shadow dark:shadow-slate-500">
@@ -150,10 +159,11 @@ const Chat: React.FC<ChatProps> = ({ member }) => {
                 </span>
               </a>
             </li>
-            <li>
+            <li onClick={toggleDropUpMenu}>
               <a
                 href="#"
                 className="flex items-center justify-center bg-gray-100 dark:bg-slate-600 dark:text-slate-200 hover:bg-gray-200 text-gray-400 h-10 w-10 rounded-full"
+                onClick={toggleDropUpMenu}
               >
                 <span>
                   <svg
@@ -174,6 +184,106 @@ const Chat: React.FC<ChatProps> = ({ member }) => {
               </a>
             </li>
           </ul>
+          <div className={`dropUpMenu ${isMoreLinksVisible ? "show" : "hide"}`}>
+            <div className="  h-auto bg-white w-[500px] absolute right-[3%] font-normal rounded-md shadow-xl overflow-hidden group-options">
+              <div className="  p-6 relative flex w-full  flex-col gap-2">
+                <div className="absolute right-8 bg-white hover:bg-gray-800 cursor-pointer rounded-full p-2">
+                  <RxCross2 />
+                </div>
+                <div className=" relative flex w-full items-center flex-col gap-2">
+                  <div className="flex items-center justify-center h-[65px] w-[65px] mt-8  rounded-full bg-pink-500 text-pink-100">
+                    {member.avatar}
+                  </div>
+                  <h2 className="text-black font-bold "> {member.username}</h2>
+                  <h3 className="text-xs "> 8 members </h3>
+
+                  <p className="text-xs flex flex-row gap-2 text-indigo-500 ">
+                    {" "}
+                    <SlPeople /> Add Members
+                  </p>
+
+                  <div className="w-full bg-white  rounded-xl mt-4">
+                    <ul className="flex flex-col gap-4 p-2  ">
+                      <li className="flex flex-row text-center gap-2 border-b-[1.5px] border-slate-200 py-1 ">
+                        <div className="flex items-center justify-center h-6 w-6 mt-1 flex-row rounded-full bg-pink-500 text-pink-100">
+                          {member.avatar}
+                        </div>
+
+                        <div className="flex flex-col">
+                          <p className="text-xs text-center ">
+                            {member.username}{" "}
+                          </p>
+                          <p className="text-xs text-center ">
+                            {member.username}{" "}
+                          </p>
+                        </div>
+                        <div className="text-xs absolute right-[6%] text-white px-4 py-1.5 rounded-xl admin">
+                          admin
+                        </div>
+                      </li>
+                      <li className="flex flex-row text-center gap-2 border-b-[1.5px] border-slate-200 py-1 ">
+                        <div className="flex items-center justify-center h-6 w-6 mt-1 flex-row rounded-full bg-pink-500 text-pink-100">
+                          {member.avatar}
+                        </div>
+                        <div className="flex flex-col">
+                          <p className="text-xs text-center ">
+                            {member.username}{" "}
+                          </p>
+                          <p className="text-xs text-center ">
+                            {member.username}{" "}
+                          </p>
+                        </div>
+                      </li>
+
+                      <li
+                        onClick={toggleDropUpMenu}
+                        className="flex flex-row justify-center text-center text-sm text-blue-500 py-1 cursor-pointer"
+                      >
+                        See all Members
+                      </li>
+
+                      {/* <div
+                        className={`dropUpMenu ${
+                          isMoreLinksVisible ? "show" : "hide"
+                        }`}
+                      >
+                        <li className="flex flex-row text-center gap-2 border-b-[1.5px] border-slate-200 py-1 ">
+                          <div className="flex items-center justify-center h-6 w-6 mt-1 flex-row rounded-full bg-pink-500 text-pink-100">
+                            {member.avatar}
+                          </div>
+                          <div className="flex flex-col">
+                            <p className="text-xs text-center ">
+                              {member.username}{" "}
+                            </p>
+                            <p className="text-xs text-center ">
+                              {member.username}{" "}
+                            </p>
+                          </div>
+                        </li>
+                        <li className="flex flex-row text-center gap-2 border-b-[1.5px] border-slate-200 py-1 ">
+                          <div className="flex items-center justify-center h-6 w-6 mt-1 flex-row rounded-full bg-pink-500 text-pink-100">
+                            {member.avatar}
+                          </div>
+                          <div className="flex flex-col">
+                            <p className="text-xs text-center ">
+                              {member.username}{" "}
+                            </p>
+                            <p className="text-xs text-center ">
+                              {member.username}{" "}
+                            </p>
+                          </div>
+                        </li>
+                      </div> */}
+                    </ul>
+                  </div>
+                </div>
+                <div className="text-xs gap-2 flex flex-col text-red-700 font-semibold p-2  cursor-pointer">
+                  <p className="hover:text-red-400"> Leave group</p>
+                  <p className="hover:text-red-400"> Report group</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
